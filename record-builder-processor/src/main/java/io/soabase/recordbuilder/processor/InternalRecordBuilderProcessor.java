@@ -27,9 +27,10 @@ import com.squareup.javapoet.TypeVariableName;
 import io.soabase.recordbuilder.core.RecordBuilderMetaData;
 
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.RecordComponentElement;
 import javax.lang.model.element.TypeElement;
-
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +51,7 @@ class InternalRecordBuilderProcessor
     private final String packageName;
     private final ClassType builderClassType;
     private final List<TypeVariableName> typeVariables;
+    private final List<? extends RecordComponentElement> fullRecordComponents;
     private final List<ClassType> recordComponents;
     private final TypeSpec builderType;
     private final TypeSpec.Builder builder;
@@ -62,7 +64,8 @@ class InternalRecordBuilderProcessor
         packageName = packageNameOpt.orElseGet(() -> ElementUtils.getPackageName(record));
         builderClassType = ElementUtils.getClassType(packageName, getBuilderName(record, metaData, recordClassType, metaData.suffix()), record.getTypeParameters());
         typeVariables = record.getTypeParameters().stream().map(TypeVariableName::get).collect(Collectors.toList());
-        recordComponents = record.getRecordComponents().stream().map(ElementUtils::getClassType).collect(Collectors.toList());
+        fullRecordComponents = record.getRecordComponents();
+        recordComponents = fullRecordComponents.stream().map(ElementUtils::getClassType).collect(Collectors.toList());
         uniqueVarName = getUniqueVarName();
 
         builder = TypeSpec.classBuilder(builderClassType.name())
@@ -104,6 +107,39 @@ class InternalRecordBuilderProcessor
     TypeSpec builderType()
     {
         return builderType;
+    }
+
+    static boolean isRequiredField(RecordComponentElement element) {
+        /*
+             Determine whether or not a field is required based on its annotations. A field is considered required if it meets
+             either of the following conditions:
+
+                1. Field has a @NotNull or @NonNull annotation
+                2. Field does not have a @Nullable annotation
+
+             If both conditions are met, an IllegalStateException is thrown.
+
+            Package private for testing
+         */
+        var hasNullableAnnotation = false;
+        var hasNotNullableAnnotation = false;
+        for(var annotation : element.getAnnotationMirrors()) {
+            var annotationName = annotation.getAnnotationType().asElement().getSimpleName().toString();
+            if(!hasNullableAnnotation && annotationName.equalsIgnoreCase("nullable")) {
+                hasNullableAnnotation = true;
+            }
+            if(!hasNotNullableAnnotation
+               && (annotationName.equalsIgnoreCase("notnull")
+                   ||  annotationName.equalsIgnoreCase("nonnull"))) {
+                hasNotNullableAnnotation = true;
+            }
+        }
+
+        if(hasNotNullableAnnotation && hasNullableAnnotation) {
+            throw new IllegalStateException(String.format("Element %s has both a nullable and not-nullable annotation",
+                    element.getSimpleName()));
+        }
+        return hasNotNullableAnnotation || !hasNullableAnnotation;
     }
 
     private void addWithNestedClass()
@@ -409,12 +445,48 @@ class InternalRecordBuilderProcessor
         builder.addMethod(methodSpec);
     }
 
+    private List<ClassType> identifyRequiredFields() {
+        /*
+            Find all of the fields in our record class which should be considered required (i.e. non-null) based on its
+            annotations.
+         */
+        return fullRecordComponents.stream()
+                .filter(InternalRecordBuilderProcessor::isRequiredField)
+                .map(ElementUtils::getClassType)
+                .filter(type -> !type.typeName().isPrimitive())
+                .toList();
+    }
+
+    private CodeBlock buildRequiredFieldsValidation() {
+        /*
+            Generate a code block which performs null checks for all of the required fields and throws an exception if any
+            are null.
+         */
+        var codeBuilder = CodeBlock.builder();
+        codeBuilder.addStatement("$T<String> missingFields = new $T<>()", List.class, ArrayList.class);
+        identifyRequiredFields().forEach(recordComponent -> {
+            codeBuilder.beginControlFlow("if(" + recordComponent.name() + " == null)");
+            codeBuilder.addStatement("missingFields.add(\"" + recordComponent.name() + "\")");
+            codeBuilder.endControlFlow();
+        });
+
+        codeBuilder.beginControlFlow("if(!missingFields.isEmpty())");
+        codeBuilder.addStatement("String message = \"Missing required properties: \" + String.join(\", \", missingFields)");
+        codeBuilder.addStatement("throw new IllegalStateException(message)");
+        codeBuilder.endControlFlow();
+
+        return codeBuilder.build();
+    }
+
     private CodeBlock buildCodeBlock() {
         /*
             Builds the code block for allocating the record from its parts
         */
 
-        var codeBuilder = CodeBlock.builder().add("return new $T(", recordClassType.typeName());
+        var codeBuilder = CodeBlock.builder();
+
+        codeBuilder.add(buildRequiredFieldsValidation().toString());
+        codeBuilder.add("return new $T(", recordClassType.typeName());
         IntStream.range(0, recordComponents.size()).forEach(index -> {
             if (index > 0) {
                 codeBuilder.add(", ");

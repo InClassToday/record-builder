@@ -17,6 +17,7 @@ package io.soabase.recordbuilder.test;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
 
+import javax.annotation.Nullable;
+
 @RecordBuilder
-public record SimpleRecord(int i, String s) {
-}
+public record SimpleRecord(int i, String s, @Nullable String n) { }
