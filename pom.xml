@@ -40,6 +40,9 @@
         <javapoet-version>1.12.1</javapoet-version>
         <junit-jupiter-version>5.5.2</junit-jupiter-version>
         <asm-version>7.2</asm-version>
+
+        <google-findugs-jsr305-version>3.0.2</google-findugs-jsr305-version>
+        <mockito-version>2.20.0</mockito-version>
     </properties>
 
     <name>Record Builder</name>
@@ -73,7 +76,6 @@
         <developer>
             <name>Everyday Labs Engineering Team</name>
             <email>engineering@everydaylabs.com</email>
-            <timezone>-5</timezone>
             <url>https://github.com/InClassToday/</url>
             <roles>
                 <role>Contributor</role>
@@ -109,6 +111,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${google-findugs-jsr305-version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.squareup</groupId>
                 <artifactId>javapoet</artifactId>
                 <version>${javapoet-version}</version>
@@ -124,6 +132,12 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit-jupiter-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
