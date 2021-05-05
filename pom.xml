@@ -5,7 +5,7 @@
     <groupId>io.soabase.record-builder</groupId>
     <artifactId>record-builder</artifactId>
     <packaging>pom</packaging>
-    <version>1.20-SNAPSHOT</version>
+    <version>1.20.0.everydaylabs-SNAPSHOT</version>
 
     <modules>
         <module>record-builder-core</module>
@@ -33,6 +33,9 @@
         <maven-shade-plugin-version>3.2.1</maven-shade-plugin-version>
         <maven-release-plugin-version>2.5.3</maven-release-plugin-version>
         <maven-surefire-plugin-version>3.0.0-M5</maven-surefire-plugin-version>
+        <maven-sonar-plugin-version>3.8.0.2131</maven-sonar-plugin-version>
+
+        <maven-license-plugin-header>${project.basedir}/src/etc/header.txt</maven-license-plugin-header>
 
         <javapoet-version>1.12.1</javapoet-version>
         <junit-jupiter-version>5.5.2</junit-jupiter-version>
@@ -41,12 +44,12 @@
 
     <name>Record Builder</name>
     <description>Record builder generator for Java records</description>
-    <url>https://github.com/randgalt/record-builder</url>
+    <url>https://github.com/InClassToday/record-builder</url>
     <inceptionYear>2019</inceptionYear>
 
     <organization>
         <name>Record Builder</name>
-        <url>https://github.com/randgalt/record-builder</url>
+        <url>https://github.com/InClassToday/record-builder</url>
     </organization>
 
     <licenses>
@@ -67,30 +70,39 @@
                 <role>Author</role>
             </roles>
         </developer>
+        <developer>
+            <name>Everyday Labs Engineering Team</name>
+            <email>engineering@everydaylabs.com</email>
+            <timezone>-5</timezone>
+            <url>https://github.com/InClassToday/</url>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/randgalt/record-builder</url>
-        <connection>scm:git:https://github.com/randgalt/record-builder.git</connection>
-        <developerConnection>scm:git:git@github.com:randgalt/record-builder.git</developerConnection>
-        <tag>record-builder-1.16</tag>
+        <url>https://github.com/InClassToday/record-builder</url>
+        <connection>scm:git:https://github.com/InClassToday/record-builder.git</connection>
+        <developerConnection>scm:git:git@github.com:InClassToday/record-builder.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
-
-    <issueManagement>
-        <system>Github</system>
-        <url>https://github.com/randgalt/record-builder/issues</url>
-    </issueManagement>
 
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Sonatype Nexus Staging</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <!-- Note that the ~/.m2/settings.xml mappings for repositories that we set usernames/passwords for
+            are so-called Artifactory "virtual" repositories that facade real local repos and real remote
+            repos.  You cannot distribute to virtual repositories, which is why we need to explicitly
+            spell out the trailing "-local" to our repo name (that's an actual local repository), but we can
+            reuse the username password because they're all the same for any Artifactory repository. -->
+            <id>releases</id>
+            <name>releases</name>
+            <url>https://inclasstoday.jfrog.io/inclasstoday/libs-release-local</url>
         </repository>
         <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>snapshots</id>
+            <name>snapshots</name>
+            <url>https://inclasstoday.jfrog.io/inclasstoday/libs-snapshot-local</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -159,7 +171,7 @@
                     <artifactId>maven-license-plugin</artifactId>
                     <version>${maven-license-plugin-version}</version>
                     <configuration>
-                        <header>src/etc/header.txt</header>
+                        <header>${maven-license-plugin-header}</header>
                         <excludes>
                             <exclude>**/*.apt</exclude>
                             <exclude>**/*.md</exclude>
@@ -281,6 +293,16 @@
                     <version>${maven-surefire-plugin-version}</version>
                     <configuration>
                         <argLine>${enable-preview}</argLine>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${maven-sonar-plugin-version}</version>
+                    <configuration>
+                        <!-- just tell sonar not to run since we're not generating coverage metrics etc -->
+                        <sonar.skip>true</sonar.skip>
                     </configuration>
                 </plugin>
             </plugins>

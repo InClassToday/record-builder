@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  maven-build: inclasstoday/maven-build@1.0.0
+workflows:
+  version: 2.1
+  verify_and_build:
+    jobs:
+      - maven-build/docker_build:
+          context: maven-build
+          pre-steps:
+            - run:
+                name: Setting environment vars
+                command: |
+                  echo "Set environment vars"
+                  printenv >> ${BASH_ENV}
+          with_docker: true
+          run_docker_compose: false

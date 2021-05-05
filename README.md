@@ -1,7 +1,12 @@
-[![Build Status](https://github.com/Randgalt/record-builder/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/Randgalt/record-builder/actions)
-[![Maven Central](https://img.shields.io/maven-central/v/io.soabase.record-builder/record-builder.svg?sort=date)](https://search.maven.org/search?q=g:io.soabase.record-builder%20a:record-builder)
-
 # RecordBuilder
+
+*NOTE* This is a fork of https://github.com/Randgalt/record-builder. We forked it so that we can tailor the generated 
+builders to our use cases and ease the transition from AutoValue.
+
+The specific use cases we wanted to accommodate in this fork are:
+
+1. Allow extending generated builder classes so we can add things like jackson annotations, default values, helper methods, etc.
+2. Add code to the generated build methods to validate required that required fields (based on annotations) are present.
 
 ## What is RecordBuilder
 
