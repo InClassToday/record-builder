@@ -244,7 +244,7 @@ class InternalRecordBuilderProcessor
             }
          */
         var constructor = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PROTECTED)
                 .addAnnotation(generatedRecordBuilderAnnotation)
                 .build();
         builder.addMethod(constructor);
@@ -283,7 +283,7 @@ class InternalRecordBuilderProcessor
             }
          */
         var constructorBuilder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PROTECTED)
                 .addAnnotation(generatedRecordBuilderAnnotation);
         recordComponents.forEach(component -> {
             constructorBuilder.addParameter(component.typeName(), component.name());
