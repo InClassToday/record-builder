@@ -3,6 +3,14 @@
 
 # RecordBuilder
 
+*NOTE* This is a fork of https://github.com/Randgalt/record-builder. We forked it so that we can tailor the generated
+builders to our use cases and ease the transition from AutoValue.
+
+The specific use cases we wanted to accommodate in this fork are:
+
+1. Allow extending generated builder classes so we can add things like jackson annotations, default values, helper methods, etc.
+2. Add code to the generated build methods to validate required that required fields (based on annotations) are present.
+
 ## What is RecordBuilder
 
 Java 16 introduces [Records](https://openjdk.java.net/jeps/395). While this version of records is fantastic, 
