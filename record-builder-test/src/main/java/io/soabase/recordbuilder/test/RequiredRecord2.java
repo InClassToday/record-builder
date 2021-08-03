@@ -17,7 +17,9 @@ package io.soabase.recordbuilder.test;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
 
+import javax.validation.constraints.NotNull;
+
+@RecordBuilder.Options(useValidationApi = true)
 @RecordBuilder
-@RecordBuilder.Options(prefixEnclosingClassNames = false)
-public record SimpleRecord(int i, String s) {
+public record RequiredRecord2(@NotNull String hey, @NotNull int i) implements RequiredRecord2Builder.With {
 }

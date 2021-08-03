@@ -17,7 +17,11 @@ package io.soabase.recordbuilder.test;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
 
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+
+@RecordBuilder.Options(emptyDefaultForOptional = true)
 @RecordBuilder
-@RecordBuilder.Options(prefixEnclosingClassNames = false)
-public record SimpleRecord(int i, String s) {
-}
+public record RecordWithOptional(Optional<String> value, Optional raw, OptionalInt i, OptionalLong l, OptionalDouble d) {}

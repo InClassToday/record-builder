@@ -15,9 +15,17 @@
  */
 package io.soabase.recordbuilder.test;
 
-import io.soabase.recordbuilder.core.RecordBuilder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-@RecordBuilder
-@RecordBuilder.Options(prefixEnclosingClassNames = false)
-public record SimpleRecord(int i, String s) {
+import java.time.Instant;
+
+class TestTemplate {
+    @Test
+    void testTemplate() {
+        var t = TemplateTestBuilder.TemplateTest("one", Instant.MIN);
+        var w = t.withText("other");
+        Assertions.assertEquals("one", t.text());
+        Assertions.assertEquals("other", w.text());
+    }
 }

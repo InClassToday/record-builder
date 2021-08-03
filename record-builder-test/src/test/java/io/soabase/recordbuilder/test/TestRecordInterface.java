@@ -39,7 +39,7 @@ public class TestRecordInterface
     @Test
     public void testStaticConstructor()
     {
-        var simple = SimpleRecord(10,"hey", "hi");
+        var simple = SimpleRecord(10,"hey");
         Assertions.assertEquals(simple.i(), 10);
         Assertions.assertEquals(simple.s(), "hey");
 
@@ -47,21 +47,5 @@ public class TestRecordInterface
         var generic = SimpleGenericRecord(101, now);
         Assertions.assertEquals(generic.i(), 101);
         Assertions.assertEquals(generic.s(), now);
-    }
-
-    @Test
-    public void testRequiredFieldsEnforced()
-    {
-        String expectedMessage = "Missing required properties: s";
-        Throwable ex = Assertions.assertThrows(IllegalStateException.class,
-                () -> SimpleRecordBuilder.builder().i(10).build());
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
-    }
-
-    @Test
-    public void testNullableFieldsNotEnforced()
-    {
-        // we are just asserting that passing in a null value for n does not trigger an exception
-        SimpleRecordBuilder.builder().i(10).s("foo").n(null).build();
     }
 }

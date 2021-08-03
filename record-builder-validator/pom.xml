@@ -4,11 +4,10 @@
         <groupId>io.soabase.record-builder</groupId>
         <artifactId>record-builder</artifactId>
         <version>23.everydaylabs-SNAPSHOT</version>
-
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>record-builder-core</artifactId>
+    <artifactId>record-builder-validator</artifactId>
 
     <properties>
         <license-file-path>${project.parent.basedir}/src/etc/header.txt</license-file-path>
@@ -22,7 +21,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>io.soabase.recordbuilder.core</Automatic-Module-Name>
+                            <Automatic-Module-Name>io.soabase.recordbuilder.validator</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
