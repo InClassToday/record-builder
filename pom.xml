@@ -5,7 +5,7 @@
     <groupId>io.soabase.record-builder</groupId>
     <artifactId>record-builder</artifactId>
     <packaging>pom</packaging>
-    <version>23.everydaylabs-SNAPSHOT</version>
+    <version>23.everydaylabs</version>
 
     <modules>
         <module>record-builder-core</module>
@@ -91,7 +91,7 @@
         <url>https://github.com/InClassToday/record-builder</url>
         <connection>scm:git:https://github.com/InClassToday/record-builder.git</connection>
         <developerConnection>scm:git:git@github.com:InClassToday/record-builder.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>record-builder-23.everydaylabs</tag>
     </scm>
 
     <distributionManagement>
