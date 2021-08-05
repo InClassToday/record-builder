@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module io.soabase.recordbuilder.core {
-    exports io.soabase.recordbuilder.core;
+package io.soabase.recordbuilder.test;
+
+import io.soabase.recordbuilder.core.RecordBuilder;
+
+import javax.validation.constraints.NotNull;
+
+@RecordBuilder.Options(interpretNotNulls = true)
+@RecordBuilder
+public record RequiredRecord(@NotNull String hey, @NotNull int i) implements RequiredRecordBuilder.With {
 }

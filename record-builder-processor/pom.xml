@@ -3,14 +3,14 @@
     <parent>
         <groupId>io.soabase.record-builder</groupId>
         <artifactId>record-builder</artifactId>
-        <version>1.20.1.everydaylabs-SNAPSHOT</version>
+        <version>23.everydaylabs-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>record-builder-processor</artifactId>
 
     <properties>
-        <maven-license-plugin-header>${project.basedir}/../src/etc/header.txt</maven-license-plugin-header>
+        <license-file-path>${project.parent.basedir}/src/etc/header.txt</license-file-path>
     </properties>
 
     <dependencies>

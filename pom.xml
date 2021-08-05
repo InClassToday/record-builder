@@ -5,12 +5,13 @@
     <groupId>io.soabase.record-builder</groupId>
     <artifactId>record-builder</artifactId>
     <packaging>pom</packaging>
-    <version>1.20.1.everydaylabs-SNAPSHOT</version>
+    <version>23.everydaylabs-SNAPSHOT</version>
 
     <modules>
         <module>record-builder-core</module>
         <module>record-builder-processor</module>
         <module>record-builder-test</module>
+        <module>record-builder-validator</module>
     </modules>
 
     <properties>
@@ -35,14 +36,17 @@
         <maven-surefire-plugin-version>3.0.0-M5</maven-surefire-plugin-version>
         <maven-sonar-plugin-version>3.8.0.2131</maven-sonar-plugin-version>
 
-        <maven-license-plugin-header>${project.basedir}/src/etc/header.txt</maven-license-plugin-header>
+        <maven-jar-plugin-version>3.2.0</maven-jar-plugin-version>
+
+        <license-file-path>src/etc/header.txt</license-file-path>
 
         <javapoet-version>1.12.1</javapoet-version>
         <junit-jupiter-version>5.5.2</junit-jupiter-version>
         <asm-version>7.2</asm-version>
 
-        <google-findugs-jsr305-version>3.0.2</google-findugs-jsr305-version>
-        <mockito-version>2.20.0</mockito-version>
+        <validation-api-version>2.0.1.Final</validation-api-version>
+        <hibernate-validator-version>6.0.20.Final</hibernate-validator-version>
+        <javax-el-version>3.0.1-b09</javax-el-version>
     </properties>
 
     <name>Record Builder</name>
@@ -129,15 +133,33 @@
             </dependency>
 
             <dependency>
+                <groupId>io.soabase.record-builder</groupId>
+                <artifactId>record-builder-validator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit-jupiter-version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito-version}</version>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.el</artifactId>
+                <version>${javax-el-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -185,7 +207,7 @@
                     <artifactId>maven-license-plugin</artifactId>
                     <version>${maven-license-plugin-version}</version>
                     <configuration>
-                        <header>${maven-license-plugin-header}</header>
+                        <header>${license-file-path}</header>
                         <excludes>
                             <exclude>**/*.apt</exclude>
                             <exclude>**/*.md</exclude>
@@ -211,6 +233,8 @@
                             <exclude>**/jvm.config</exclude>
                             <exclude>**/.java-version</exclude>
                             <exclude>**/.travis.yml</exclude>
+                            <exclude>**/gradlew</exclude>
+                            <exclude>**/.github/**</exclude>
                         </excludes>
                         <strictCheck>true</strictCheck>
                     </configuration>
@@ -326,6 +350,17 @@
                         <sonar.skip>true</sonar.skip>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin-version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin-version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -369,7 +404,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin-version}</version>
                         <configuration>
                             <passphrase>${gpg.passphrase}</passphrase>
                             <useAgent>true</useAgent>
