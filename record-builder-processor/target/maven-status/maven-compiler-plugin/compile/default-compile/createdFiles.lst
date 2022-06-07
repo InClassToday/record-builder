@@ -1,0 +1,15 @@
+io/soabase/recordbuilder/processor/RecordBuilderOptions.class
+io/soabase/recordbuilder/processor/InternalRecordInterfaceProcessor$IllegalInterface.class
+io/soabase/recordbuilder/processor/RecordClassType.class
+io/soabase/recordbuilder/processor/InternalRecordInterfaceProcessor$Component.class
+io/soabase/recordbuilder/processor/InternalRecordBuilderProcessor.class
+io/soabase/recordbuilder/processor/RecordBuilderProcessor.class
+io/soabase/recordbuilder/processor/InternalRecordInterfaceProcessor.class
+io/soabase/recordbuilder/processor/CollectionBuilderUtils$SingleItemsMetaData.class
+io/soabase/recordbuilder/processor/ClassType.class
+io/soabase/recordbuilder/processor/CollectionBuilderUtils$1.class
+io/soabase/recordbuilder/processor/IncludeHelper.class
+io/soabase/recordbuilder/processor/CollectionBuilderUtils.class
+io/soabase/recordbuilder/processor/CollectionBuilderUtils$SingleItemsMetaDataMode.class
+io/soabase/recordbuilder/processor/OptionalType.class
+io/soabase/recordbuilder/processor/ElementUtils.class
